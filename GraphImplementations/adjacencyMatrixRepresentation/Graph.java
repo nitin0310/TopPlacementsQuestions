@@ -32,6 +32,10 @@ public class Graph {
 		adjMatrix[destination][source]=1;
 	}
 	
+	void deleteNode(int source,int destination) {//O(1)
+		adjMatrix[source][destination]=0;
+		adjMatrix[destination][source]=0;
+	}
 	
 	void printGraph(int vertex) {
 		for(int i=0;i<vertex;i++) {
