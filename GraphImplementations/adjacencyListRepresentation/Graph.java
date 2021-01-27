@@ -37,6 +37,23 @@ public class Graph {
 		adjList[destination].add(source);
 	}
 	
+	void deleteEdge(int source,int destination) {//O(E)
+		int index=0;
+		for(int neighbor:adjList[source]) {//getting index of that vertex
+			if(neighbor==destination) {
+				break;
+			}
+			index++;
+		}
+		
+		index=0;
+		for(int neighbor:adjList[destination]) {//getting index of that vertex
+			if(neighbor==source) {
+				break;
+			}
+			index++;
+		}
+	}
 	
 	void printGraph(int vertex) {
 		for(int i=0;i<vertex;i++) {
