@@ -9,6 +9,7 @@ union joins two sets to make a single set with one parent
 parallely it maintains rank, so that we don't have big ltree type structure, rank increases only when two sets joins and both parents have same rank, so after joining it levels up
 
 and the best thing about union find is its time complexity is O(1) time complexity with path compression
+***********it can also help us to detect cycle with checking if two nodes belongs to same set or not, checks this while implementing kruskal's algorithm*********************
 */
 
 public class MainClass {
