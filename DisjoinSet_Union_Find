@@ -1,0 +1,42 @@
+package disjointUnionFind;
+
+public class MainClass {
+	
+	int[] parent=new int[100000];
+	int[] rank=new int[100000];
+	
+	public void makeSets() {
+		for(int i=0;i<100000;i++) {
+			parent[i]=i;//parent of itself at initial when everyone is individual
+			rank[i]=0;
+		}
+	}
+
+	public int find(int a) {
+		if(parent[a]==a)	return a;
+		
+		return find(parent[a]);//recursively going 8->7->6->5->4 then return 4, if(4 is a parent of a set [4,5,6,7,8]), so complexity increased
+	}
+	
+	public int findPathCompressed(int a) {
+		if(parent[a]==a)	return a;
+		
+		return parent[a]=find(parent[a]);//here it will set 8->4 7->4 6->4 5->4 recursive and in next time return directly so complexity reduced a lot
+	}
+	
+	public void union(int a,int b) {
+		int p1=find(a);
+		int p2=find(b);
+		
+		if(rank[p1]<rank[p2]) parent[p1]=p2;
+		else if(rank[p1]>rank[p2]) parent[p2]=p1;
+		else {												//if rank is equal then we can choose anyone among them, and increase rank of new leader
+			parent[p1]=p2;
+			rank[p2]++;
+		}
+	}
+	
+	public static void main(String args[]) {
+		
+	}
+}
