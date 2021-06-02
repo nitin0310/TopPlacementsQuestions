@@ -1,0 +1,108 @@
+static void PrimsAlgo(int V,ArrayList<ArrayList<ArrayList<Integer>>> adj){//O(V^2)
+
+        int[] key=new int[V];
+        int[] inMST=new int[V];
+        int[] parent=new int[V];
+        Arrays.fill(key,100000000);
+        Arrays.fill(parent,-1);
+        key[0]=0;
+        
+        for(int i=0;i<V;i++){
+            int min=100000000;
+            int u=0;
+            for(int j=0;j<V;j++){//taking edge with min weight, which havn'e yet added in MST
+                if(inMST[j]!=1 && key[j]<min){
+                    min=key[j];
+                    u=j;
+                }
+            }
+            
+            inMST[u]=1;//shows u is taken in MST, explore all neighbors of u to get edge with min weight
+            
+            for(ArrayList<Integer> neigh:adj.get(u)){
+                if(inMST[neigh.get(0)]!=1 && neigh.get(1)<key[neigh.get(0)]){
+                    key[neigh.get(0)]=neigh.get(1);//u to neigh is added in MST
+                    parent[neigh.get(0)]=u;
+                }
+            }
+        }
+        
+        for(int i=1;i<V;i++){//bcz 0th have no parent, it was first node we added to MST
+            System.out.print(parent[i]+" --> "+i);
+        }
+}
+
+class Node{
+    int val;
+    int w;
+    Node(int val,int w){
+        this.val=val;
+        this.w=w;
+    }
+}
+
+
+
+
+
+
+static void kruskalsAlgo(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj){
+        parent=new int[V];
+        rank=new int[V];
+        
+        for(int i=0;i<V;i++){
+            parent[i]=i;
+            rank[i]=0;
+        }
+        
+        List<Pair> list=new ArrayList<Pair>();
+        for(int i=0;i<V;i++){
+            list.add(new Pair(adj.get(i).get(0).get(0),adj.get(i).get(1).get(0),adj.get(i).get(0).get(2)));
+        }
+        
+        Collections.sort(list,(a,b) -> Integer.compare(a.w,b.w));
+        
+        List<Pair> mst=new ArrayList<Pair>();
+        while(!list.isEmpty()){
+            Pair p=list.remove(0);
+            
+            if(find(p.u)!=find(p.v)){
+                union(p.u,p.v);
+                mst.add(p);
+            }
+        }
+        
+        
+        for(Pair p:mst) System.out.print(p.u+" --> "+p.v);
+}
+    
+    static int find(int a){
+        if(parent[a]==a)    return a;
+        
+        return parent[a]=find(parent[a]);
+    }
+    
+    static void union(int a,int b){
+        int p1=find(a);
+        int p2=find(b);
+        
+        //it means they doesn't belongs to same set or component, that means they cannot form cycle
+        if(rank[p1]<rank[p2])   parent[p1]=p2;
+        else if(rank[p1]>rank[p2])  parent[p2]=p1;
+        else{
+            parent[p1]=p2;
+            rank[p2]++;
+        }
+    }
+    
+    
+class Pair{
+    int u;
+    int v;
+    int w;
+    Pair(int u,int v,int w){
+        this.u=u;
+        this.v=v;
+        this.w=w;
+    }
+}
