@@ -1,0 +1,45 @@
+package articulationPint;
+import java.util.*;
+
+//find bridge concept with minute changes
+
+
+public class MainClass {
+	
+	static int discTime;
+	static Set<Integer> set;	      //so that we don't get same point more than one, like in case of 1--8, 8--1
+	public void find(int V,ArrayList<ArrayList<Integer>> adj) {
+		discTime=0;
+		set=new HashSet<Integer>();
+		int[] disc=new int[V];
+		int[] low=new int[V];
+		int[] vis=new int[V];
+		
+		for(int i=0;i<V;i++) {
+			if(vis[i]!=-1)	dfs(i,-1,disc,low,vis,adj);
+		}
+	}
+	
+	static void dfs(int src,int parent,int[] disc,int[] low,int[] vis,ArrayList<ArrayList<Integer>> adj) {
+		disc[src]=discTime;
+		low[src]=discTime++;
+		vis[src]=1;
+		
+		int child=0;
+		for(int neigh : adj.get(src)) {
+			if(parent==neigh)	continue;
+			
+			if(vis[neigh]!=1) {
+				dfs(neigh,src,disc,low,vis,adj);
+				low[src]=Math.min(low[neigh],low[src]);
+				
+				if(low[neigh]>=disc[src] && parent!=-1)	set.add(neigh);//special check for root
+				child++;
+			}else {
+				low[src]=Math.min(low[src],disc[neigh]);
+			}
+		}
+		
+		if(parent==-1 && child>1)	set.add(src);           //in case of n-ary tree root type graph structure, so if we remove this we can never reach other childrens
+	}
+}
