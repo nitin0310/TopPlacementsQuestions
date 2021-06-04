@@ -1,0 +1,75 @@
+package floydWarshallAlgo;
+
+/*
+ * All Pair Shortest Path algorithm, each vertex to each vertex shortest path
+ * 
+ Graph should be Directed, weighted
+ it can also detect -ve weight cycle,
+ we find min distance from same vertex to same,if it go to -ve it means there's a -ve weight cycle
+ 
+ O(V^3) time
+ O(V^2) space
+ */
+public class Graph {
+	
+	int outputMatrix[][];
+	
+	Graph(int vertex){
+		outputMatrix=new int[vertex][vertex];
+	}
+	
+	void floydWarshallAlgo(int[][] adjMatrix,int vertex) {
+
+		for(int i=0;i<vertex;i++) {
+			for(int j=0;j<vertex;j++) {
+				if(i==j) outputMatrix[i][j]=0;                                                                          //no edge to self
+        else if(adjMatrix[i][j]==0 && i!=j) outputMatrix[i][j]=Integer.MAX_VALUE;                               //no egde btw node i and node j
+				else outputMatrix[i][j]=adjMatrix[i][j];                                                                //add given weight
+			}
+		}
+		
+		
+		//to consider every node as k, run a loop
+		for(int k=0;k<vertex;k++) {
+			
+			for(int i=0;i<vertex;i++) {
+				for(int j=0;j<vertex;j++) {
+					if(outputMatrix[i][k]==Integer.MAX_VALUE || outputMatrix[k][j]==Integer.MAX_VALUE) 		continue;       //if no edge exists btw i to k,then we can't consider k, then skip it
+
+					outputMatrix[i][j]=Math.min(outputMatrix[i][j], outputMatrix[i][k]+outputMatrix[k][j]);
+				}
+			}
+		}
+		
+		printAllPairShortestPath(outputMatrix,vertex);
+	}
+	
+	void printAllPairShortestPath(int[][] outputMatrix,int vertex) {
+		
+		for(int i=0;i<vertex;i++) {
+			if(outputMatrix[i][i]<0) {
+				System.out.println("Negative cycle exist!");
+				return;
+			}
+		}
+		
+		for(int i=0;i<vertex;i++) {
+			for(int j=0;j<vertex;j++) {
+				System.out.println(i+" -> "+j+" : "+outputMatrix[i][j]);
+			}
+		}
+	}
+	
+	public static void main(String args[]) {
+		Graph graph=new Graph(4);
+		
+		int[][] adjMatrix= {
+				{0,3,0,5},
+				{2,0,0,8},
+				{0,1,0,0},
+				{0,0,2,0}
+		};
+		
+		graph.floydWarshallAlgo(adjMatrix,4);
+	}
+}
