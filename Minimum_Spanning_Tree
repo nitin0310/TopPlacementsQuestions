@@ -63,7 +63,7 @@ static void kruskalsAlgo(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj){
         Collections.sort(list,(a,b) -> Integer.compare(a.w,b.w));
         
         List<Pair> mst=new ArrayList<Pair>();
-        while(!list.isEmpty()){
+        while(!list.isEmpty()){                 //if both belongs to the same parent then it simply means there already exists a path to reach both nodes, then why to add that edge again
             Pair p=list.remove(0);
             
             if(find(p.u)!=find(p.v)){
